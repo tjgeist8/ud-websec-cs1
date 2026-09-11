@@ -1,6 +1,6 @@
-const path = require("path");
 const express = require("express");
 const session = require("express-session");
+const path = require("path");
 
 const db = require("./db");
 const seed = require("./seed");
@@ -16,7 +16,6 @@ const sessionSecret = process.env.SESSION_SECRET || "bluetag-dev-session-secret"
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -57,6 +56,10 @@ app.use((err, _req, res, _next) => {
   res.status(500).render("500", { title: "Server error" });
 });
 
-app.listen(port, "0.0.0.0", () => {
-  console.log(`BlueTag listening on http://0.0.0.0:${port}`);
-});
+if (require.main === module) {
+  app.listen(port, "0.0.0.0", () => {
+    console.log(`BlueTag listening on http://0.0.0.0:${port}`);
+  });
+}
+
+module.exports = app;
